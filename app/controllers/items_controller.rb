@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
   def index
     if params[:category_name]
       unless Category.find_by(name: params[:category_name])
-        render json: { status: '404', message: 'requested category does not exist' }
+        render json: { status: '404', message: 'requested category does not exist' }, status: :not_found
         return
       end
       items = Category.find_by(name: params[:category_name]).items.order(created_at: :desc)
@@ -21,7 +21,7 @@ class ItemsController < ApplicationController
     if item.save
       render json: { status: '201', data: item }
     else
-      render json: { status: '422', data: item.errors }
+      render json: { status: '422', data: item.errors }, status: :unprocessable_entity
     end
   end
 end
